@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard Izin & Absensi</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+    .sidebar {
+      width: 220px;
+      background: #222;
+      color: #fff;
+      position: fixed;
+      height: 100%;
+      padding: 20px;
+    }
+    .sidebar h2 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .sidebar a {
+      display: block;
+      color: #fff;
+      padding: 10px;
+      text-decoration: none;
+      margin-bottom: 10px;
+      border-radius: 5px;
+    }
+    .sidebar a:hover {
+      background: #444;
+    }
+    .main {
+      margin-left: 240px;
+      padding: 20px;
+    }
+    .card {
+      background: #fff;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .timer {
+      font-size: 2em;
+      text-align: center;
+      margin-bottom: 15px;
+    }
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      background: green;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      font-size: 1em;
+      cursor: pointer;
+    }
+    .btn:hover {
+      background: darkgreen;
+    }
+    .stats {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 20px;
+    }
+    .stats div {
+      background: #eee;
+      padding: 15px;
+      border-radius: 8px;
+      text-align: center;
+      flex: 1;
+      margin: 5px;
+    }
+    .history {
+      max-height: 200px;
+      overflow-y: auto;
+    }
+    .history p {
+      margin: 5px 0;
+      padding: 8px;
+      background: #fafafa;
+      border-radius: 5px;
+      border: 1px solid #ddd;
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <h2>RuangWD</h2>
+    <a href="#">Izin Keluar</a>
+    <a href="#">Riwayat Lengkap</a>
+    <a href="#">Absen Masuk</a>
+    <a href="#">Jadwal Shift</a>
+    <a href="#">Pengaturan</a>
+  </div>
+
+  <div class="main">
+    <div class="card">
+      <h3>Timer Izin Keluar</h3>
+      <div class="timer" id="timer">15:00</div>
+      <button class="btn" onclick="startTimer()">MULAI IZIN KELUAR</button>
+    </div>
+
+    <div class="card">
+      <h3>Riwayat Terbaru</h3>
+      <div class="history" id="history"></div>
+    </div>
+
+    <div class="card">
+      <h3>Statistik</h3>
+      <div class="stats">
+        <div><strong id="izinHariIni">0</strong><br>Izin Hari Ini</div>
+        <div><strong id="sedangIzin">0</strong><br>Sedang Izin</div>
+        <div><strong id="totalIzin">0</strong><br>Total Izin</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let timerDuration = 15 * 60; // 15 menit dalam detik
+    let timer;
+    let izinHariIni = 0;
+    let sedangIzin = 0;
+    let totalIzin = 0;
+
+    function startTimer() {
+      clearInterval(timer);
+      let remaining = timerDuration;
+      sedangIzin = 1;
+      document.getElementById("sedangIzin").innerText = sedangIzin;
+      document.getElementById("izinHariIni").innerText = ++izinHariIni;
+      document.getElementById("totalIzin").innerText = ++totalIzin;
+
+      const history = document.getElementById("history");
+      const startTime = new Date().toLocaleString();
+      const entry = document.createElement("p");
+      entry.innerText = "Mulai: " + startTime;
+      history.appendChild(entry);
+
+      timer = setInterval(() => {
+        let minutes = Math.floor(remaining / 60);
+        let seconds = remaining % 60;
+        document.getElementById("timer").innerText =
+          minutes.toString().padStart(2, "0") + ":" +
+          seconds.toString().padStart(2, "0");
+        remaining--;
+
+        if (remaining < 0) {
+          clearInterval(timer);
+          sedangIzin = 0;
+          document.getElementById("sedangIzin").innerText = sedangIzin;
+          const endTime = new Date().toLocaleString();
+          const backEntry = document.createElement("p");
+          backEntry.innerText = "Kembali: " + endTime + " (15 menit)";
+          history.appendChild(backEntry);
+        }
+      }, 1000);
+    }
+  </script>
+</body>
+</html>
