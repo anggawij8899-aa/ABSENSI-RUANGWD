@@ -9,55 +9,184 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Header -->
-    <header class="header">
-        <div class="header-content">
-            <div class="logo">
-                <i class="fas fa-link"></i>
+    <!-- Login Page -->
+    <div id="loginPage" class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <div class="login-logo">
+                    <i class="fas fa-link"></i>
+                </div>
                 <h1>Link Manager Pro</h1>
+                <p>Silakan login untuk mengakses dashboard</p>
             </div>
-            <div class="header-stats">
-                <div class="stat-badge">
-                    <i class="fas fa-check-circle"></i>
-                    <span id="activeCount">0</span> Link Aktif
+            <form id="loginForm" class="login-form">
+                <div class="form-group">
+                    <label><i class="fas fa-user"></i> Username</label>
+                    <input type="text" id="loginUsername" placeholder="Masukkan username" required>
                 </div>
-                <div class="stat-badge warning">
-                    <i class="fas fa-clock"></i>
-                    <span id="inactiveCount">0</span> Tidak Aktif
+                <div class="form-group">
+                    <label><i class="fas fa-lock"></i> Password</label>
+                    <div class="password-wrapper">
+                        <input type="password" id="loginPassword" placeholder="Masukkan password" required>
+                        <button type="button" class="toggle-password" onclick="togglePassword()">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
                 </div>
+                <div class="form-group remember-me">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="rememberMe">
+                        <span>Ingat saya</span>
+                    </label>
+                </div>
+                <button type="submit" class="btn-login">
+                    <i class="fas fa-sign-in-alt"></i> Masuk
+                </button>
+            </form>
+            <div class="login-footer">
+                <p>Default: admin / admin123</p>
             </div>
         </div>
-    </header>
+    </div>
 
-    <!-- Main Container -->
-    <div class="main-container">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <nav class="sidebar-nav">
-                <a href="#" class="nav-item active" data-menu="active">
-                    <i class="fas fa-bolt"></i>
-                    <span>Link Aktif</span>
-                    <span class="badge" id="activeBadge">0</span>
-                </a>
-                <a href="#" class="nav-item" data-menu="all">
-                    <i class="fas fa-database"></i>
-                    <span>Data Login Link</span>
-                    <span class="badge" id="allBadge">0</span>
-                </a>
-                <a href="#" class="nav-item" data-menu="inactive">
-                    <i class="fas fa-archive"></i>
-                    <span>Link Tidak Digunakan</span>
-                    <span class="badge" id="inactiveBadge">0</span>
-                </a>
-            </nav>
+    <!-- Main Dashboard (Hidden by default) -->
+    <div id="dashboardPage" style="display: none;">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-link"></i>
+                    <h1>Link Manager Pro</h1>
+                </div>
+                <div class="header-stats">
+                    <div class="stat-badge">
+                        <i class="fas fa-check-circle"></i>
+                        <span id="activeCount">0</span> Link Aktif
+                    </div>
+                    <div class="stat-badge warning">
+                        <i class="fas fa-clock"></i>
+                        <span id="inactiveCount">0</span> Tidak Aktif
+                    </div>
+                    <div class="user-menu">
+                        <div class="user-info">
+                            <i class="fas fa-user-circle"></i>
+                            <span id="currentUser">Admin</span>
+                        </div>
+                        <button class="btn-logout" onclick="logout()">
+                            <i class="fas fa-sign-out-alt"></i> Keluar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
 
-            <!-- Quick Add Form -->
-            <div class="quick-add">
-                <h3><i class="fas fa-plus-circle"></i> Tambah Link Baru</h3>
-                <form id="addLinkForm">
+        <!-- Main Container -->
+        <div class="main-container">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <nav class="sidebar-nav">
+                    <a href="#" class="nav-item active" data-menu="active">
+                        <i class="fas fa-bolt"></i>
+                        <span>Link Aktif</span>
+                        <span class="badge" id="activeBadge">0</span>
+                    </a>
+                    <a href="#" class="nav-item" data-menu="all">
+                        <i class="fas fa-database"></i>
+                        <span>Data Login Link</span>
+                        <span class="badge" id="allBadge">0</span>
+                    </a>
+                    <a href="#" class="nav-item" data-menu="inactive">
+                        <i class="fas fa-archive"></i>
+                        <span>Link Tidak Digunakan</span>
+                        <span class="badge" id="inactiveBadge">0</span>
+                    </a>
+                </nav>
+
+                <!-- Quick Add Form -->
+                <div class="quick-add">
+                    <h3><i class="fas fa-plus-circle"></i> Tambah Link Baru</h3>
+                    <form id="addLinkForm">
+                        <input type="hidden" id="editId">
+                        <div class="form-group">
+                            <label>Kategori</label>
+                            <select id="categorySelect" required>
+                                <option value="">Pilih Kategori...</option>
+                                <option value="domain-cadangan">Link Domain Cadangan</option>
+                                <option value="landingpage">Link Landingpage</option>
+                                <option value="ip">Link IP</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Nama Link</label>
+                            <input type="text" id="linkName" placeholder="Masukkan nama link..." required>
+                        </div>
+                        <div class="form-group">
+                            <label>URL Link</label>
+                            <input type="url" id="linkUrl" placeholder="https://..." required>
+                        </div>
+                        <div class="form-group">
+                            <label>Keterangan</label>
+                            <textarea id="linkDescription" placeholder="Keterangan link..."></textarea>
+                        </div>
+                        <button type="submit" class="btn-primary" id="submitBtn">
+                            <i class="fas fa-save"></i> Simpan Link
+                        </button>
+                        <button type="button" class="btn-cancel" id="cancelEditBtn" style="display: none;" onclick="cancelEdit()">
+                            <i class="fas fa-times"></i> Batal Edit
+                        </button>
+                    </form>
+                </div>
+            </aside>
+
+            <!-- Content Area -->
+            <main class="content">
+                <!-- Toolbar -->
+                <div class="toolbar">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="searchInput" placeholder="Cari link...">
+                    </div>
+                    <div class="filter-group">
+                        <select id="categoryFilter">
+                            <option value="all">Semua Kategori</option>
+                            <option value="domain-cadangan">Link Domain Cadangan</option>
+                            <option value="landingpage">Link Landingpage</option>
+                            <option value="ip">Link IP</option>
+                        </select>
+                    </div>
+                    <button class="btn-refresh" onclick="loadLinks()">
+                        <i class="fas fa-sync-alt"></i> Refresh
+                    </button>
+                </div>
+
+                <!-- Content Sections -->
+                <div id="linkSections">
+                    <!-- Dynamic Content -->
+                </div>
+
+                <!-- Empty State -->
+                <div id="emptyState" class="empty-state" style="display: none;">
+                    <i class="fas fa-inbox"></i>
+                    <h3>Tidak ada link</h3>
+                    <p>Tambahkan link baru melalui form di sidebar</p>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-edit"></i> Edit Link</h3>
+                <button class="close-modal" onclick="closeEditModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="editLinkForm">
+                    <input type="hidden" id="modalEditId">
                     <div class="form-group">
                         <label>Kategori</label>
-                        <select id="categorySelect" required>
+                        <select id="modalCategorySelect" required>
                             <option value="">Pilih Kategori...</option>
                             <option value="domain-cadangan">Link Domain Cadangan</option>
                             <option value="landingpage">Link Landingpage</option>
@@ -66,56 +195,25 @@
                     </div>
                     <div class="form-group">
                         <label>Nama Link</label>
-                        <input type="text" id="linkName" placeholder="Masukkan nama link..." required>
+                        <input type="text" id="modalLinkName" placeholder="Masukkan nama link..." required>
                     </div>
                     <div class="form-group">
                         <label>URL Link</label>
-                        <input type="url" id="linkUrl" placeholder="https://..." required>
+                        <input type="url" id="modalLinkUrl" placeholder="https://..." required>
                     </div>
                     <div class="form-group">
                         <label>Keterangan</label>
-                        <textarea id="linkDescription" placeholder="Keterangan link..."></textarea>
+                        <textarea id="modalLinkDescription" placeholder="Keterangan link..."></textarea>
                     </div>
-                    <button type="submit" class="btn-primary">
-                        <i class="fas fa-save"></i> Simpan Link
-                    </button>
+                    <div class="modal-footer">
+                        <button type="button" class="btn-secondary" onclick="closeEditModal()">Batal</button>
+                        <button type="submit" class="btn-primary">
+                            <i class="fas fa-save"></i> Update Link
+                        </button>
+                    </div>
                 </form>
             </div>
-        </aside>
-
-        <!-- Content Area -->
-        <main class="content">
-            <!-- Toolbar -->
-            <div class="toolbar">
-                <div class="search-box">
-                    <i class="fas fa-search"></i>
-                    <input type="text" id="searchInput" placeholder="Cari link...">
-                </div>
-                <div class="filter-group">
-                    <select id="categoryFilter">
-                        <option value="all">Semua Kategori</option>
-                        <option value="domain-cadangan">Link Domain Cadangan</option>
-                        <option value="landingpage">Link Landingpage</option>
-                        <option value="ip">Link IP</option>
-                    </select>
-                </div>
-                <button class="btn-refresh" onclick="loadLinks()">
-                    <i class="fas fa-sync-alt"></i> Refresh
-                </button>
-            </div>
-
-            <!-- Content Sections -->
-            <div id="linkSections">
-                <!-- Dynamic Content -->
-            </div>
-
-            <!-- Empty State -->
-            <div id="emptyState" class="empty-state" style="display: none;">
-                <i class="fas fa-inbox"></i>
-                <h3>Tidak ada link</h3>
-                <p>Tambahkan link baru melalui form di sidebar</p>
-            </div>
-        </main>
+        </div>
     </div>
 
     <!-- Move to Inactive Modal -->
@@ -123,7 +221,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h3><i class="fas fa-arrow-right"></i> Pindahkan Link</h3>
-                <button class="close-modal" onclick="closeModal()">&times;</button>
+                <button class="close-modal" onclick="closeMoveModal()">&times;</button>
             </div>
             <div class="modal-body">
                 <p>Apakah Anda yakin ingin memindahkan link ini ke <strong>Link Tidak Digunakan</strong>?</p>
@@ -139,7 +237,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn-secondary" onclick="closeModal()">Batal</button>
+                <button class="btn-secondary" onclick="closeMoveModal()">Batal</button>
                 <button class="btn-danger" onclick="confirmMove()">
                     <i class="fas fa-exchange-alt"></i> Pindahkan
                 </button>
