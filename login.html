@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login Dashboard</title>
+  <link href="assets/css/style.css" rel="stylesheet">
+</head>
+<body class="bg-dark text-white d-flex justify-content-center align-items-center vh-100">
+  <form id="loginForm" class="p-4 bg-secondary rounded">
+    <h3 class="mb-3">Login</h3>
+    <input type="text" id="username" class="form-control mb-2" placeholder="Username">
+    <input type="password" id="password" class="form-control mb-2" placeholder="Password">
+    <button type="submit" class="btn btn-primary w-100">Login</button>
+  </form>
+
+<script>
+document.getElementById("loginForm").addEventListener("submit", function(e){
+  e.preventDefault();
+  let user = document.getElementById("username").value;
+  let pass = document.getElementById("password").value;
+  if(user === "admin" && pass === "admin123"){
+    window.location.href = "index.html";
+  } else {
+    alert("Login gagal bosku!");
+  }
+});
+</script>
+</body>
+</html>
