@@ -1,166 +1,155 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <title>Dashboard Izin & Absensi</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f4f4f4;
-      margin: 0;
-      padding: 0;
-    }
-    .sidebar {
-      width: 220px;
-      background: #222;
-      color: #fff;
-      position: fixed;
-      height: 100%;
-      padding: 20px;
-    }
-    .sidebar h2 {
-      text-align: center;
-      margin-bottom: 30px;
-    }
-    .sidebar a {
-      display: block;
-      color: #fff;
-      padding: 10px;
-      text-decoration: none;
-      margin-bottom: 10px;
-      border-radius: 5px;
-    }
-    .sidebar a:hover {
-      background: #444;
-    }
-    .main {
-      margin-left: 240px;
-      padding: 20px;
-    }
-    .card {
-      background: #fff;
-      padding: 20px;
-      margin-bottom: 20px;
-      border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
-    .timer {
-      font-size: 2em;
-      text-align: center;
-      margin-bottom: 15px;
-    }
-    .btn {
-      display: block;
-      width: 100%;
-      padding: 10px;
-      background: green;
-      color: #fff;
-      border: none;
-      border-radius: 5px;
-      font-size: 1em;
-      cursor: pointer;
-    }
-    .btn:hover {
-      background: darkgreen;
-    }
-    .stats {
-      display: flex;
-      justify-content: space-around;
-      margin-top: 20px;
-    }
-    .stats div {
-      background: #eee;
-      padding: 15px;
-      border-radius: 8px;
-      text-align: center;
-      flex: 1;
-      margin: 5px;
-    }
-    .history {
-      max-height: 200px;
-      overflow-y: auto;
-    }
-    .history p {
-      margin: 5px 0;
-      padding: 8px;
-      background: #fafafa;
-      border-radius: 5px;
-      border: 1px solid #ddd;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Pencatatan Link - Link Manager Pro</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="sidebar">
-    <h2>RuangWD</h2>
-    <a href="#">Izin Keluar</a>
-    <a href="#">Riwayat Lengkap</a>
-    <a href="#">Absen Masuk</a>
-    <a href="#">Jadwal Shift</a>
-    <a href="#">Pengaturan</a>
-  </div>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <i class="fas fa-link"></i>
+                <h1>Link Manager Pro</h1>
+            </div>
+            <div class="header-stats">
+                <div class="stat-badge">
+                    <i class="fas fa-check-circle"></i>
+                    <span id="activeCount">0</span> Link Aktif
+                </div>
+                <div class="stat-badge warning">
+                    <i class="fas fa-clock"></i>
+                    <span id="inactiveCount">0</span> Tidak Aktif
+                </div>
+            </div>
+        </div>
+    </header>
 
-  <div class="main">
-    <div class="card">
-      <h3>Timer Izin Keluar</h3>
-      <div class="timer" id="timer">15:00</div>
-      <button class="btn" onclick="startTimer()">MULAI IZIN KELUAR</button>
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" data-menu="active">
+                    <i class="fas fa-bolt"></i>
+                    <span>Link Aktif</span>
+                    <span class="badge" id="activeBadge">0</span>
+                </a>
+                <a href="#" class="nav-item" data-menu="all">
+                    <i class="fas fa-database"></i>
+                    <span>Data Login Link</span>
+                    <span class="badge" id="allBadge">0</span>
+                </a>
+                <a href="#" class="nav-item" data-menu="inactive">
+                    <i class="fas fa-archive"></i>
+                    <span>Link Tidak Digunakan</span>
+                    <span class="badge" id="inactiveBadge">0</span>
+                </a>
+            </nav>
+
+            <!-- Quick Add Form -->
+            <div class="quick-add">
+                <h3><i class="fas fa-plus-circle"></i> Tambah Link Baru</h3>
+                <form id="addLinkForm">
+                    <div class="form-group">
+                        <label>Kategori</label>
+                        <select id="categorySelect" required>
+                            <option value="">Pilih Kategori...</option>
+                            <option value="domain-cadangan">Link Domain Cadangan</option>
+                            <option value="landingpage">Link Landingpage</option>
+                            <option value="ip">Link IP</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Nama Link</label>
+                        <input type="text" id="linkName" placeholder="Masukkan nama link..." required>
+                    </div>
+                    <div class="form-group">
+                        <label>URL Link</label>
+                        <input type="url" id="linkUrl" placeholder="https://..." required>
+                    </div>
+                    <div class="form-group">
+                        <label>Keterangan</label>
+                        <textarea id="linkDescription" placeholder="Keterangan link..."></textarea>
+                    </div>
+                    <button type="submit" class="btn-primary">
+                        <i class="fas fa-save"></i> Simpan Link
+                    </button>
+                </form>
+            </div>
+        </aside>
+
+        <!-- Content Area -->
+        <main class="content">
+            <!-- Toolbar -->
+            <div class="toolbar">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" placeholder="Cari link...">
+                </div>
+                <div class="filter-group">
+                    <select id="categoryFilter">
+                        <option value="all">Semua Kategori</option>
+                        <option value="domain-cadangan">Link Domain Cadangan</option>
+                        <option value="landingpage">Link Landingpage</option>
+                        <option value="ip">Link IP</option>
+                    </select>
+                </div>
+                <button class="btn-refresh" onclick="loadLinks()">
+                    <i class="fas fa-sync-alt"></i> Refresh
+                </button>
+            </div>
+
+            <!-- Content Sections -->
+            <div id="linkSections">
+                <!-- Dynamic Content -->
+            </div>
+
+            <!-- Empty State -->
+            <div id="emptyState" class="empty-state" style="display: none;">
+                <i class="fas fa-inbox"></i>
+                <h3>Tidak ada link</h3>
+                <p>Tambahkan link baru melalui form di sidebar</p>
+            </div>
+        </main>
     </div>
 
-    <div class="card">
-      <h3>Riwayat Terbaru</h3>
-      <div class="history" id="history"></div>
+    <!-- Move to Inactive Modal -->
+    <div id="moveModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-arrow-right"></i> Pindahkan Link</h3>
+                <button class="close-modal" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Apakah Anda yakin ingin memindahkan link ini ke <strong>Link Tidak Digunakan</strong>?</p>
+                <div id="modalLinkInfo"></div>
+                <div class="form-group">
+                    <label>Alasan tidak digunakan</label>
+                    <select id="inactiveReason">
+                        <option value="kadaluarsa">Kadaluarsa</option>
+                        <option value="tidak-dibutuhkan">Tidak Dibutuhkan</option>
+                        <option value="rusak">Rusak/Broken</option>
+                        <option value="lainnya">Lainnya</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeModal()">Batal</button>
+                <button class="btn-danger" onclick="confirmMove()">
+                    <i class="fas fa-exchange-alt"></i> Pindahkan
+                </button>
+            </div>
+        </div>
     </div>
 
-    <div class="card">
-      <h3>Statistik</h3>
-      <div class="stats">
-        <div><strong id="izinHariIni">0</strong><br>Izin Hari Ini</div>
-        <div><strong id="sedangIzin">0</strong><br>Sedang Izin</div>
-        <div><strong id="totalIzin">0</strong><br>Total Izin</div>
-      </div>
-    </div>
-  </div>
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
 
-  <script>
-    let timerDuration = 15 * 60; // 15 menit dalam detik
-    let timer;
-    let izinHariIni = 0;
-    let sedangIzin = 0;
-    let totalIzin = 0;
-
-    function startTimer() {
-      clearInterval(timer);
-      let remaining = timerDuration;
-      sedangIzin = 1;
-      document.getElementById("sedangIzin").innerText = sedangIzin;
-      document.getElementById("izinHariIni").innerText = ++izinHariIni;
-      document.getElementById("totalIzin").innerText = ++totalIzin;
-
-      const history = document.getElementById("history");
-      const startTime = new Date().toLocaleString();
-      const entry = document.createElement("p");
-      entry.innerText = "Mulai: " + startTime;
-      history.appendChild(entry);
-
-      timer = setInterval(() => {
-        let minutes = Math.floor(remaining / 60);
-        let seconds = remaining % 60;
-        document.getElementById("timer").innerText =
-          minutes.toString().padStart(2, "0") + ":" +
-          seconds.toString().padStart(2, "0");
-        remaining--;
-
-        if (remaining < 0) {
-          clearInterval(timer);
-          sedangIzin = 0;
-          document.getElementById("sedangIzin").innerText = sedangIzin;
-          const endTime = new Date().toLocaleString();
-          const backEntry = document.createElement("p");
-          backEntry.innerText = "Kembali: " + endTime + " (15 menit)";
-          history.appendChild(backEntry);
-        }
-      }, 1000);
-    }
-  </script>
+    <script src="script.js"></script>
 </body>
 </html>
